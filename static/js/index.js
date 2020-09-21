@@ -1,15 +1,15 @@
 //https://www.eclipse.org/paho/clients/js/
 
 function LED1_On() {
-    
-	console.log("Encendido");
-    alert("led on");
-    sendMessage("On");
+	alert("led on");
+	console.log("led on");
+	document.getElementById("sensor").innerHTML="led on";
+  
 }
 function LED1_Off(){	
-	console.log("Apagado");
-    alert("led off");
-    sendMessage("Off");
+	alert("led off");
+	console.log("led off");
+	document.getElementById("sensor").innerHTML="led off";
 }
 
 
@@ -27,8 +27,8 @@ function LED1_Off(){
   client.onMessageArrived = onMessageArrived;
   var options = {
    useSSL: false,
-    userName: "iatorres@hotmail.es",
-    password: "israel123torres",
+    userName: "skillet776@yahoo.com",
+    password: "1993orellana768",
     onSuccess:onConnect,
     onFailure:doFail
   }
@@ -39,10 +39,12 @@ function LED1_Off(){
   // called when the client connects
   function onConnect() {
     // Once a connection has been made, make a subscription and send a message.
-    console.log("Conexion Establecida");
+    console.log("Conectado...");
 	
-    client.subscribe("iatorres@hotmail.es/test");
-    sendMessage("hola desde mii web");
+    client.subscribe("skillet776@yahoo.com/test");
+    message = new Paho.MQTT.Message("hola desde la web");
+    message.destinationName = "skillet776@yahoo.com/test1";
+    client.send(message);
 	
   }
 
@@ -60,15 +62,7 @@ function LED1_Off(){
 
   // called when a message arrives
   function onMessageArrived(message) {
-    mensaje=message.payloadString.split("= ");
-    document.getElementById("sensor").innerHTML=mensaje[1];
-    console.log("MensajeRecibido:"+message.payloadString);
-
-  }
-
-  function sendMessage(Texto){
-    message = new Paho.MQTT.Message(Texto);
-    message.destinationName = "iatorres@hotmail.es/test1";
-    client.send(message);
+    console.log("onMessageArrived:"+message.payloadString);
+	  doAction(message.payloadString);
   }
   
